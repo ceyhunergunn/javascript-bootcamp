@@ -4,7 +4,7 @@
 // Scoping in Practice
 
 /*
-function calcAge(birthYear) {
+function calc Age(birthYear) {
   const age = 2037 - birthYear;
 
   function printAge() {
@@ -230,4 +230,3 @@ jessicaCopy.family.push('John');
 console.log('Before marriage:', jessica2);
 console.log('After marriage: ', jessicaCopy);
 */
-
