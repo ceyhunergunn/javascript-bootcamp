@@ -487,48 +487,232 @@ acc1.requestLoan(1000);
 console.log(acc1);
 
 console.log(acc1.pin);
-*/
 
 //////////////////////////////////////
 // Encapsulation: Protected Properties and Methods
+class Account {
+  constructor(owner, curency, pin) {
+    this.owner = owner;
+    this.curency = curency;
+    this._pin = pin;
+    //protected property
+    this._movements = [];
+    this.locale = navigator.language;
 
-class PersonCl {
-  constructor(fullName, birthYear) {
-    this.fullName = fullName;
-    this.birthYear = birthYear;
+    console.log(`Thanks for openning an Account, ${owner}`);
   }
-  //   calc() {
-  //     console.log('Parent Class:', 2024 - this.birthYear);
-  //   }
+
+  //Public Interface
+  getMovements() {
+    return this._movements;
+  }
+  deposit(val) {
+    this._movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+  _approveLoan(val) {
+    return true;
+  }
+  requestLoan(val) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log('Loan Approved!');
+    }
+  }
 }
 
-class StudentCl extends PersonCl {
-  constructor(fullName, birthYear, course) {
-    //Always needs to happen first!
-    super(fullName, birthYear);
-    this.course = course;
+const acc1 = new Account('Jonas', 'EUR', 1111);
+
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+// acc1._movements.push(250);
+// acc1._movements.push(-140);
+
+//////////////////////////////////////
+// Encapsulation: Private Class Fields and Methods
+
+// 1) public fields
+// 2) private fields
+// 3) public methods
+// 4) private methods
+class Account {
+  // 1)public fields (instances)
+  locale = navigator.language;
+
+  // 2)private fields (instances)
+  #movements = [];
+  #pin;
+
+  constructor(owner, curency, pin) {
+    this.owner = owner;
+    this.curency = curency;
+    this.#pin = pin;
+
+    console.log(`Thanks for openning an Account, ${owner}`);
   }
-  calc() {
-    console.log('Student Class:', 2024 - this.birthYear);
+  // 3)public methods
+
+  getMovements() {
+    return this.#movements;
+  }
+  deposit(val) {
+    this.#movements.push(val);
+  }
+  withdraw(val) {
+    this.deposit(-val);
+  }
+  requestLoan(val) {
+    // if (this.#approveLoan(val)) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log('Loan Approved!');
+    }
+  }
+
+  static helper() {
+    console.log('Helper');
+  }
+  // 4) private methods
+  // #approveLoan(val) {
+  _approveLoan(val) {
+    return true;
   }
 }
-class CeyhunCl extends PersonCl {
-  constructor(fullName, birthYear, course) {
-    //Always needs to happen first!
-    super(fullName, birthYear);
-    this.course = course;
+const acc1 = new Account('Jonas', 'EUR', 1111);
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+console.log(acc1);
+
+Account.helper();
+
+//////////////////////////////////////
+// Chaining Methods
+class Account {
+  // 1)public fields (instances)
+  locale = navigator.language;
+
+  // 2)private fields (instances)
+  #movements = [];
+  #pin;
+
+  constructor(owner, curency, pin) {
+    this.owner = owner;
+    this.curency = curency;
+    this.#pin = pin;
+
+    console.log(`Thanks for openning an Account, ${owner}`);
   }
-  //   calc() {
-  //     console.log('Ceyhun Class:', 2024 - this.birthYear);
-  //   }
+  // 3)public methods
+
+  getMovements() {
+    return this.#movements;
+  }
+  deposit(val) {
+    this.#movements.push(val);
+    return this;
+  }
+  withdraw(val) {
+    this.deposit(-val);
+    return this;
+  }
+  requestLoan(val) {
+    // if (this.#approveLoan(val)) {
+    if (this._approveLoan(val)) {
+      this.deposit(val);
+      console.log('Loan Approved!');
+    }
+    return this;
+  }
+
+  static helper() {
+    console.log('Helper');
+  }
+  // 4) private methods
+  // #approveLoan(val) {
+  _approveLoan(val) {
+    return true;
+  }
+}
+const acc1 = new Account('Jonas', 'EUR', 1111);
+acc1.deposit(250);
+acc1.withdraw(140);
+acc1.requestLoan(1000);
+console.log(acc1.getMovements());
+console.log(acc1);
+
+Account.helper();
+
+//chaining
+acc1.deposit(300).deposit(500).withdraw(34).requestLoan(2333);
+console.log(acc1.getMovements());
+///////////////////////////////////////
+// Coding Challenge #4
+
+1. Re-create challenge #3, but this time using ES6 classes: create an 'EVCl' child class of the 'CarCl' class
+2. Make the 'charge' property private;
+3. Implement the ability to chain the 'accelerate' and 'chargeBattery' methods of this class, and also update the 'brake' method in the 'CarCl' class. They experiment with chining!
+
+DATA CAR 1: 'Rivian' going at 120 km/h, with a charge of 23%
+
+*/
+
+class CarCl {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    this.speed += 10;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+  brake() {
+    this.speed -= 5;
+    console.log(`${this.make} is going at ${this.speed} km/h`);
+    return this;
+  }
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
 }
 
-const ceyhun = new StudentCl('Ceyhun Ergün', 1999, 'CS');
-const emre = new CeyhunCl('Emre Ergün', 1989, 'CS');
-
-function araba(std) {
-  std.calc();
+class EVCl extends CarCl {
+  #charge;
+  constructor(make, speed, charge) {
+    super(make, charge);
+    this.#charge = charge;
+  }
+  chargeBattery(chargeTo) {
+    this.#charge = chargeTo;
+    return this;
+  }
+  accelerate() {
+    this.speed += 20;
+    this.#charge--;
+    console.log(
+      `${this.make} is going at ${this.speed} km/h, with a charge of ${
+        this.#charge
+      }`
+    );
+    return this;
+  }
 }
 
-araba(ceyhun);
-araba(emre);
+const rivian = new EVCl('Rivian', 120, 23);
+console.log(rivian);
+rivian
+  .accelerate()
+  .accelerate()
+  .accelerate()
+  .brake()
+  .chargeBattery(50)
+  .accelerate();
