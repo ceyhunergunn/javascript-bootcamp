@@ -30,7 +30,7 @@ body {
   /* margin-bottom: 8rem; */
   display: flex;
   font-size: 2rem;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 1s;
 }
 
